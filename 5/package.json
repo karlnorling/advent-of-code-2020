@@ -1,7 +1,7 @@
 {
-  "name": "advent-of-code-4",
+  "name": "advent-of-code-5",
   "version": "1.0.0",
-  "description": "Advent of code 2020 dec 4th",
+  "description": "Advent of code 2020 dec 5th",
   "main": "index.js",
   "scripts": {
     "test": "test"
