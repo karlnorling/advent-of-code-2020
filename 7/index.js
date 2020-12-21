@@ -1,6 +1,4 @@
-const { createVerify } = require('crypto');
 const fs = require('fs');
-const { constants } = require('http2');
 /*
 --- Day 7: Handy Haversacks ---
 You land at the regional airport in time for your next flight. 
