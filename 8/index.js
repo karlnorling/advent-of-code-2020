@@ -1,6 +1,4 @@
-const { throws } = require('assert');
 const fs = require('fs');
-const { runInThisContext } = require('vm');
 
 /*
 --- Day 8: Handheld Halting ---
