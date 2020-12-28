@@ -184,19 +184,42 @@ const jolts = fs.readFileSync('data.txt', 'utf-8')
 
 class JoltMe {
   constructor(jolts) {
-    this.jolts = jolts.push(jolts[jolts.length-1] + 3);
+    jolts.push(jolts[jolts.length-1] + 3);
+    this.jolts = jolts;
     this.differences = new Map();
+    this.joltTree = {};
+    this.ranges = [1, 2, 3];
+    this.uniqueCount = 0;
+    this.cache = {};
   }
 
   joltsMultiplied() {
     return this.differences.get(1).length * this.differences.get(3).length;
   }
 
+  findCombinations(currentEnd = 0, availableAdapters = this.jolts) {
+    if (currentEnd === this.jolts[this.jolts.length - 1]) {
+      return 1;
+    }
+    let combinationCount = 0;
+    this.ranges.forEach(range => {
+      const jolt = currentEnd + range;
+      if (availableAdapters.includes(jolt)) {
+        const remaining = availableAdapters.filter((value) => (value > jolt));
+        if (!this.cache[jolt]) {
+          this.cache[jolt] = this.findCombinations(jolt, remaining);
+        }
+        combinationCount += this.cache[jolt];
+      }
+    });
+    return combinationCount;
+  }
+
   groupJoltDiffs() {
     let index = 0;
     let prevJolt = 0;
-    for (const jolt of jolts) {
-      prevJolt = jolts[index-1] || 0;
+    this.jolts.forEach((jolt) => {
+      prevJolt = this.jolts[index-1] || 0;
       const diff = jolt - prevJolt;
       let values = [];
       if (this.differences.has(diff)) {
@@ -215,10 +238,11 @@ class JoltMe {
       }
       index++;
       this.differences.set(diff, values);
-    }
+    });
   }
 }
 
 const joltMe = new JoltMe(jolts);
 joltMe.groupJoltDiffs();
-console.log(joltMe.joltsMultiplied());
+console.log(`Part 1: ${joltMe.joltsMultiplied()}`);
+console.log(`Part 2: ${joltMe.findCombinations()}`);
